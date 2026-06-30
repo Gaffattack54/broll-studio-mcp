@@ -1,0 +1,29 @@
+{
+  "name": "broll-studio-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server for B-Roll Studio — search, download, and place real b-roll on an editor timeline, driven by Claude Code.",
+  "bin": {
+    "broll-studio-mcp": "index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "timeline.mjs",
+    "premiere.mjs",
+    "resolve_insert.py",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node index.mjs",
+    "test": "node timeline.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gaffattack54/broll-studio-mcp.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.8"
+  }
+}
