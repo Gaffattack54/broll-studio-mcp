@@ -48,8 +48,10 @@ npm install -g $Package --no-audit --no-fund
 
 # 5. Register in Claude Code (user scope, idempotent)
 Step "Registering 'broll-studio' in Claude Code (user scope)..."
+# Note: no `--` — PowerShell strips it before claude sees it. The bin has no
+# args, so the command can be a plain positional.
 claude mcp remove broll-studio -s user 2>$null
-claude mcp add broll-studio -s user -e "BROLL_API_KEY=$ApiKey" -e "BROLL_API_BASE=$ApiBase" -- broll-studio-mcp
+claude mcp add broll-studio broll-studio-mcp -s user -e "BROLL_API_KEY=$ApiKey" -e "BROLL_API_BASE=$ApiBase"
 
 # 6. Verify
 Step "Verifying..."
