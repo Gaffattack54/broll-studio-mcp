@@ -14,6 +14,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Allow npm.ps1 / node scripts to run in THIS process (some machines default to
+# Restricted). Process scope only — nothing persistent, no admin needed.
+try { Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force } catch {}
+
 function Update-Path {
   $machine = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
   $user = [System.Environment]::GetEnvironmentVariable("Path", "User")
@@ -40,11 +44,16 @@ else { Step "Installing Git..."; winget install --id Git.Git -e --source winget 
 if (Have claude) { Step "Claude Code already installed" }
 else { Step "Installing Claude Code..."; Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression; Update-Path }
 
+# The native Claude installer drops claude.exe in ~\.local\bin but may not put it
+# on PATH. Add it for this session so `claude mcp add` below works.
+$claudeBin = Join-Path $env:USERPROFILE ".local\bin"
+if ((Test-Path $claudeBin) -and ($env:Path -notlike "*$claudeBin*")) { $env:Path = "$env:Path;$claudeBin" }
+
 if (-not (Have node)) { Write-Host "[X] Node not on PATH yet. Close & reopen PowerShell, then re-run." -ForegroundColor Red; return }
 
-# 4. Install the package
+# 4. Install the package (npm.cmd, not npm.ps1 — avoids execution-policy issues)
 Step "Installing the B-Roll Studio MCP server..."
-npm install -g $Package --no-audit --no-fund
+npm.cmd install -g $Package --no-audit --no-fund
 
 # 5. Register in Claude Code (user scope, idempotent)
 Step "Registering 'broll-studio' in Claude Code (user scope)..."
