@@ -22,10 +22,9 @@ B-Roll Studio → **Settings → API keys**, then:
 ```bash
 npm install -g github:Gaffattack54/broll-studio-mcp
 
-claude mcp add broll-studio -s user \
+claude mcp add broll-studio broll-studio-mcp -s user \
   -e BROLL_API_KEY=brs_live_your_key \
-  -e BROLL_API_BASE=https://broll-studio-ten.vercel.app \
-  -- broll-studio-mcp
+  -e BROLL_API_BASE=https://broll-studio-ten.vercel.app
 ```
 
 Verify: `claude mcp list` → `broll-studio: ✓ Connected`. The server is now
